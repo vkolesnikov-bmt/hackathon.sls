@@ -1,5 +1,5 @@
 {
-  "name": "template-aws-sls",
+  "name": "hackathon-sls",
   "version": "1.0.0",
   "description": "AWS + Serverless API for your application",
   "main": "index.js",
@@ -103,7 +103,6 @@
     "dotenv": "16.0.0",
     "dynamoose": "^2.8.3",
     "nodemailer": "^6.7.2",
-    "reflect-metadata": "^0.1.13",
     "sequelize": "^6.12.2",
     "sequelize-typescript": "^2.1.1",
     "source-map-support": "^0.5.21",

@@ -15,35 +15,6 @@ export const examplesConfig: AWSPartitial = {
   },
   functions: {
     // prefix "api" for API Gateway Lambda triggers
-    apiExampleHttpApiDefaultResponse: {
-      handler: 'api/http-api/handler.defaultResponse',
-      memorySize: 128,
-      events: [
-        {
-          httpApi: {
-            path: '/example/http-api/default-response',
-            method: 'get',
-            authorizer: {
-              name: 'exampleAuthorizer',
-            },
-          },
-        },
-      ],
-    },
-    // prefix "api" for API Gateway Lambda triggers
-    apiExampleHttpApiCustomResponse: {
-      handler: 'api/http-api/handler.customResponse',
-      memorySize: 128,
-      events: [
-        {
-          httpApi: {
-            path: '/example/http-api/custom-response',
-            method: 'get',
-          },
-        },
-      ],
-    },
-    // prefix "api" for API Gateway Lambda triggers
     apiExampleRestApiDefaultResponse: {
       handler: 'api/rest-api/handler.handler',
       memorySize: 128,
@@ -67,10 +38,6 @@ export const examplesConfig: AWSPartitial = {
           },
         },
       ],
-    },
-    exampleAuthorizerHttpApi: {
-      handler: 'api/auth/handler.httpApiSimple',
-      memorySize: 128,
     },
     exampleAuthorizerRestApi: {
       handler: 'api/auth/handler.authentication',
