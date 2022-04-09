@@ -1,5 +1,6 @@
 import { log } from '@helper/logger';
 import { DynamodbService } from '@services/dynamodb.service';
+import { EmailService } from '@services/email.service';
 import { Handler } from 'aws-lambda';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
@@ -22,12 +23,14 @@ export const getCities: Handler<APIGatewayLambdaEvent<null>, CitiesGetResponse> 
 };
 
 export type EmailBody = { email: string };
-export const initEmailVerification: Handler<APIGatewayLambdaEvent<EmailBody>, void> = async (event) => {
+export const initEmailVerification: Handler<APIGatewayLambdaEvent<EmailBody>, string> = async (event) => {
   log(event);
   try {
     const manager = new ClientApiManager();
+    const dynamoDB = new DynamodbService('hackathon-email-verification');
+    const emailService = new EmailService();
     const { email } = event.body;
-    return await manager.initEmailVerification(email);
+    return await manager.initEmailVerification(email, dynamoDB, emailService);
   } catch (error) {
     errorHandler(error);
   }

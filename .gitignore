@@ -21,4 +21,4 @@ typings/
 documentation/
 coverage/
 .esbuild/
-/awsCredentials.ts
+/credentials.ts

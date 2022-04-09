@@ -12,7 +12,7 @@ import {
   UpdateItemInput,
 } from 'aws-sdk/clients/dynamodb';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { accessKeyId, secretAccessKey } from '../awsCredentials';
+import { accessKeyId, secretAccessKey } from '../credentials';
 
 export class DynamodbService {
   private readonly dynamoClient;
