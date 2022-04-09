@@ -45,13 +45,13 @@ export class DynamodbService {
     return this.dynamoClient.putItem(params).promise();
   }
 
-  async query(options: Partial<QueryInput>): Promise<Array<any[]> | undefined> {
+  async query<T = any>(options: Partial<QueryInput>): Promise<T> {
     const params: QueryInput = {
       TableName: this.tableName,
       ...options,
     };
     const { Items } = await this.dynamoClient.query(params).promise();
-    return Items?.map((item) => unmarshall(item) as any);
+    return Items!.map((item) => unmarshall(item)) as T;
   }
 
   async scan(options: Partial<ScanInput> = {}): Promise<any> {
