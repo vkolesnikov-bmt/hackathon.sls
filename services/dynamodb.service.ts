@@ -26,14 +26,16 @@ export class DynamodbService {
     this.dynamoClient = new DynamoDB();
   }
 
-  async getItem(keys: ObjectType, options: Partial<GetItemInput> = {}): Promise<AttributeMap | undefined> {
+  async getItem(keys: ObjectType, options: Partial<GetItemInput> = {}): Promise<any | undefined> {
     const params: GetItemInput = {
       TableName: this.tableName,
       Key: this.getKeys(keys),
       ...options,
     };
-    const { Item } = await this.dynamoClient.getItem(params).promise();
-    return Item;
+    const item = await this.dynamoClient.getItem(params).promise();
+    if (item.Item) {
+      return unmarshall(item.Item);
+    }
   }
 
   async createItem(item: any, options: Partial<PutItemInput> = {}): Promise<PutItemOutput> {
@@ -74,6 +76,15 @@ export class DynamodbService {
       ...options,
     };
     await this.dynamoClient.updateItem(params).promise();
+  }
+
+  async deleteItem(keys: ObjectType, options: Partial<UpdateItemInput> = {}): Promise<void> {
+    const params = {
+      TableName: this.tableName,
+      Key: this.getKeys(keys),
+      ...options,
+    };
+    await this.dynamoClient.deleteItem(params).promise();
   }
 
   private getKeys(keys: ObjectType): { [key: string]: any } {

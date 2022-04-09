@@ -65,13 +65,13 @@ export const clientAPIConfig: AWSPartitial = {
         },
       ],
     },
-    addUserReview: {
-      handler: 'api/client-api/handler.addUserReview',
+    addHumanRequest: {
+      handler: 'api/client-api/handler.addHumanRequest',
       memorySize: 128,
       events: [
         {
           http: {
-            path: 'api/client/review/',
+            path: 'api/client/addHumanRequest',
             method: 'post',
             integration: 'lambda',
             cors: true,
