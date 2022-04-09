@@ -2,6 +2,7 @@ import { HttpError } from '@floteam/errors/http/http-error';
 import { DynamodbService } from '@services/dynamodb.service';
 import { EmailService } from '@services/email.service';
 import { ClientApiService } from './client-api.service';
+import { CitiesGetResponse } from './handler';
 
 export class ClientApiManager {
   private readonly service: ClientApiService;
@@ -9,7 +10,13 @@ export class ClientApiManager {
     this.service = new ClientApiService();
   }
 
-  async getCities(): Promise<any> {}
+  async getCities(dynamoDB: DynamodbService): Promise<CitiesGetResponse> {
+    const cities = await dynamoDB.scan();
+    return cities.map((city) => ({
+      city: city.city,
+      organizations: JSON.parse(city.organizations),
+    }));
+  }
 
   async getOrganizations(cityId: string): Promise<any> {}
 

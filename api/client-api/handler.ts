@@ -7,16 +7,14 @@ import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface'
 import { ClientApiManager } from './client-api.manager';
 import { City } from './client.interfaces';
 
+const manager = new ClientApiManager();
+
 export type CitiesGetResponse = City[];
 export const getCities: Handler<APIGatewayLambdaEvent<null>, CitiesGetResponse> = async (event) => {
   log(event);
   try {
     const dynamoDB = new DynamodbService('hackathon-organizations');
-    const cities = await dynamoDB.scan();
-    return cities.map((city) => ({
-      city: city.city,
-      organizations: JSON.parse(city.organizations),
-    }));
+    return await manager.getCities(dynamoDB);
   } catch (error) {
     errorHandler(error);
   }
@@ -26,7 +24,6 @@ export type EmailBody = { email: string };
 export const initEmailVerification: Handler<APIGatewayLambdaEvent<EmailBody>, string> = async (event) => {
   log(event);
   try {
-    const manager = new ClientApiManager();
     const dynamoDB = new DynamodbService('hackathon-email-verification');
     const emailService = new EmailService();
     const { email } = event.body;
@@ -40,7 +37,6 @@ export type VerifyEmailBody = { email: string; verificationCode: string };
 export const verifyEmail: Handler<APIGatewayLambdaEvent<VerifyEmailBody>, string> = async (event) => {
   log(event);
   try {
-    const manager = new ClientApiManager();
     const dynamoDB = new DynamodbService('hackathon-email-verification');
     const { email, verificationCode } = event.body;
     return await manager.verifyEmailCode(email, verificationCode, dynamoDB);
