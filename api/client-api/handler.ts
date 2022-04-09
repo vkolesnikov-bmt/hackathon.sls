@@ -45,7 +45,7 @@ export const verifyEmail: Handler<APIGatewayLambdaEvent<VerifyEmailBody>, string
   }
 };
 
-export const addHumanRequest: Handler<APIGatewayLambdaEvent<HumanRequest>, void> = async (event) => {
+export const addHumanRequest: Handler<APIGatewayLambdaEvent<HumanRequest>, string> = async (event) => {
   log(event);
   try {
     const dynamoDB = new DynamodbService('hackathon-human-request');
