@@ -1,8 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 import { clientAPIConfig } from './config/serverless/parts/clientAPI';
-import { examplesConfig } from './config/serverless/parts/examples';
-import { jobsConfig } from './config/serverless/parts/jobs';
-import { usersConfig } from './config/serverless/parts/users';
+import { clientReviewsConfig } from './config/serverless/parts/reviews';
 import { joinParts } from './config/serverless/utils';
 
 const CLIENT = '${file(./env.yml):${self:provider.stage}.CLIENT}';
@@ -128,4 +126,4 @@ const masterConfig: AWS = {
   ],
 };
 
-module.exports = joinParts(masterConfig, [clientAPIConfig, jobsConfig, usersConfig, examplesConfig]);
+module.exports = joinParts(masterConfig, [clientAPIConfig, clientReviewsConfig]);
