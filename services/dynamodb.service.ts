@@ -4,14 +4,13 @@ import { ObjectType } from '@interfaces/api-gateway-lambda.interface';
 import { config, DynamoDB } from 'aws-sdk';
 import {
   AttributeMap,
+  GetItemInput,
   PutItemInput,
   PutItemOutput,
   QueryInput,
   ScanInput,
   UpdateItemInput,
 } from 'aws-sdk/clients/dynamodb';
-import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
-import GetItemInput = DocumentClient.GetItemInput;
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { accessKeyId, secretAccessKey } from '../awsCredentials';
 

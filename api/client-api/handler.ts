@@ -1,20 +1,21 @@
 import { log } from '@helper/logger';
+import { DynamodbService } from '@services/dynamodb.service';
 import { Handler } from 'aws-lambda';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
 import { ClientApiManager } from './client-api.manager';
-
-export interface City {
-  id: string;
-  name: string;
-  organizations: string[];
-}
+import { City } from './client.interfaces';
 
 export type CitiesGetResponse = City[];
-export const getCities: Handler<APIGatewayLambdaEvent<null>, void> = async (event) => {
+export const getCities: Handler<APIGatewayLambdaEvent<null>, CitiesGetResponse> = async (event) => {
   log(event);
   try {
-    const manager = new ClientApiManager();
+    const dynamoDB = new DynamodbService('hackathon-organizations');
+    const cities = await dynamoDB.scan();
+    return cities.map((city) => ({
+      city: city.city,
+      organizations: JSON.parse(city.organizations),
+    }));
   } catch (error) {
     errorHandler(error);
   }

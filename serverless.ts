@@ -59,11 +59,11 @@ const masterConfig: AWS = {
       number: 3,
     },
     envFiles: ['env.yml'],
-    envEncryptionKeyId: {
-      local: '${file(./kms_key.yml):local}',
-      dev: '${file(./kms_key.yml):dev}',
-      prod: '${file(./kms_key.yml):prod}',
-    },
+    // envEncryptionKeyId: {
+    //   local: '${file(./kms_key.yml):local}',
+    //   dev: '${file(./kms_key.yml):dev}',
+    //   prod: '${file(./kms_key.yml):prod}',
+    // },
     'serverless-offline': {
       ignoreJWTSignature: true,
     },
