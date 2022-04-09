@@ -1,8 +1,11 @@
 import { HttpError } from '@floteam/errors/http/http-error';
+import { v4 as uuidv4 } from 'uuid';
 import { DynamodbService } from '@services/dynamodb.service';
 import { EmailService } from '@services/email.service';
 import { ClientApiService } from './client-api.service';
-import { CitiesGetResponse } from './handler';
+import { HumanRequest } from './client.interfaces';
+
+import { addHumanRequest, CitiesGetResponse } from './handler';
 
 export class ClientApiManager {
   private readonly service: ClientApiService;
@@ -17,8 +20,6 @@ export class ClientApiManager {
       organizations: JSON.parse(city.organizations),
     }));
   }
-
-  async getOrganizations(cityId: string): Promise<any> {}
 
   async initEmailVerification(email: string, dynamoDB: DynamodbService, emailService: EmailService): Promise<string> {
     const verificationCode: string = this.service.generateCode();
@@ -37,5 +38,11 @@ export class ClientApiManager {
     } else {
       throw new HttpError(404, 'Verification', 'Verification code error');
     }
+  }
+
+  async addHumanRequest(eventBody: HumanRequest, dynamoDB: DynamodbService) {
+    const requestId = uuidv4();
+    const newItem = { ...eventBody, requestId };
+    await dynamoDB.createItem(newItem);
   }
 }

@@ -5,7 +5,7 @@ import { Handler } from 'aws-lambda';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
 import { ClientApiManager } from './client-api.manager';
-import { City } from './client.interfaces';
+import { City, HumanRequest } from './client.interfaces';
 
 const manager = new ClientApiManager();
 
@@ -45,10 +45,11 @@ export const verifyEmail: Handler<APIGatewayLambdaEvent<VerifyEmailBody>, string
   }
 };
 
-export const addUserReview: Handler<APIGatewayLambdaEvent<null>, string> = async (event) => {
+export const addHumanRequest: Handler<APIGatewayLambdaEvent<HumanRequest>, void> = async (event) => {
   log(event);
   try {
-    return 'Hi!';
+    const dynamoDB = new DynamodbService('hackathon-human-request');
+    return await manager.addHumanRequest(event.body, dynamoDB);
   } catch (error) {
     errorHandler(error);
   }
