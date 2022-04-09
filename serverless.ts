@@ -1,9 +1,6 @@
 import type { AWS } from '@serverless/typescript';
-import { examplesConfig } from './config/serverless/parts/examples';
-import { getMediaInfoConfig } from './config/serverless/parts/get-media-info';
-import { jobsConfig } from './config/serverless/parts/jobs';
-import { restApiCorsConfig } from './config/serverless/parts/rest-api-cors';
-import { usersConfig } from './config/serverless/parts/users';
+import { clientAPIConfig } from './config/serverless/parts/clientAPI';
+import { clientReviewsConfig } from './config/serverless/parts/reviews';
 import { joinParts } from './config/serverless/utils';
 
 const CLIENT = '${file(./env.yml):${self:provider.stage}.CLIENT}';
@@ -65,7 +62,6 @@ const masterConfig: AWS = {
     envEncryptionKeyId: {
       local: '${file(./kms_key.yml):local}',
       dev: '${file(./kms_key.yml):dev}',
-      test: '${file(./kms_key.yml):test}',
       prod: '${file(./kms_key.yml):prod}',
     },
     'serverless-offline': {
@@ -130,10 +126,4 @@ const masterConfig: AWS = {
   ],
 };
 
-module.exports = joinParts(masterConfig, [
-  restApiCorsConfig,
-  getMediaInfoConfig,
-  jobsConfig,
-  usersConfig,
-  examplesConfig,
-]);
+module.exports = joinParts(masterConfig, [clientAPIConfig, clientReviewsConfig]);
