@@ -44,5 +44,6 @@ export class ClientApiManager {
     const requestId = uuidv4();
     const newItem = { ...eventBody, requestId };
     await dynamoDB.createItem(newItem);
+    return 'Human request is send';
   }
 }

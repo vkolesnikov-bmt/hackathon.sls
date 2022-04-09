@@ -14,7 +14,7 @@ export type RequestStatus = 'created' | 'inProgress' | 'readyToReview' | 'review
 export type RequestType = 'complaint' | 'reviews';
 
 export interface HumanRequest {
-  id: string;
+  organizationId: string;
   type: RequestType;
   status: RequestStatus;
   tags: string[];
@@ -23,5 +23,5 @@ export interface HumanRequest {
   createdAt: Date;
   updatedAt: Date;
   city: string;
-  institution: string;
+  organization: string;
 }
