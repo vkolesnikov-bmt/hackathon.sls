@@ -1,7 +1,7 @@
 import { HttpNotFoundError } from '@floteam/errors';
 import { getEnv } from '@helper/environment';
 import { ObjectType } from '@interfaces/api-gateway-lambda.interface';
-import { DynamoDB } from 'aws-sdk';
+import { config, DynamoDB } from 'aws-sdk';
 import {
   AttributeMap,
   PutItemInput,
@@ -13,11 +13,19 @@ import {
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import GetItemInput = DocumentClient.GetItemInput;
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { accessKeyId, secretAccessKey } from '../awsCredentials';
 
 export class DynamodbService {
-  private readonly dynamoClient = new DynamoDB({ region: getEnv('REGION') });
+  private readonly dynamoClient;
 
-  constructor(private tableName: string) {}
+  constructor(private tableName: string) {
+    config.update({
+      accessKeyId: accessKeyId,
+      secretAccessKey: secretAccessKey,
+      region: getEnv('REGION'),
+    });
+    this.dynamoClient = new DynamoDB();
+  }
 
   async getItem(keys: ObjectType, options: Partial<GetItemInput> = {}): Promise<AttributeMap | undefined> {
     const params: GetItemInput = {
