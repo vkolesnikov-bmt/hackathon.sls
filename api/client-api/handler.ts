@@ -36,10 +36,14 @@ export const initEmailVerification: Handler<APIGatewayLambdaEvent<EmailBody>, st
   }
 };
 
-export const verifyEmail: Handler<APIGatewayLambdaEvent<null>, string> = async (event) => {
+export type VerifyEmailBody = { email: string; verificationCode: string };
+export const verifyEmail: Handler<APIGatewayLambdaEvent<VerifyEmailBody>, string> = async (event) => {
   log(event);
   try {
-    return 'Hi!';
+    const manager = new ClientApiManager();
+    const dynamoDB = new DynamodbService('hackathon-email-verification');
+    const { email, verificationCode } = event.body;
+    return await manager.verifyEmailCode(email, verificationCode, dynamoDB);
   } catch (error) {
     errorHandler(error);
   }

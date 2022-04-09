@@ -1,3 +1,4 @@
+import { HttpError } from '@floteam/errors/http/http-error';
 import { DynamodbService } from '@services/dynamodb.service';
 import { EmailService } from '@services/email.service';
 import { ClientApiService } from './client-api.service';
@@ -21,5 +22,13 @@ export class ClientApiManager {
     return 'Email send success';
   }
 
-  async verifyEmailCode(code: number): Promise<void> {}
+  async verifyEmailCode(email: string, userCode: string, dynamoDB: DynamodbService): Promise<string> {
+    const verificationCode = await this.service.getVerificationCode(email, dynamoDB);
+    if (verificationCode === userCode) {
+      await dynamoDB.deleteItem({ email });
+      return 'Verification success';
+    } else {
+      throw new HttpError(404, 'Verification', 'Verification code error');
+    }
+  }
 }
