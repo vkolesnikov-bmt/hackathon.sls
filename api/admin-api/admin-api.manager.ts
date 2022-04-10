@@ -1,5 +1,5 @@
 import { DynamodbService } from '@services/dynamodb.service';
-import { HumanRequest, ReviewBody } from '../interface/interfaces';
+import { HumanRequest, Review, ReviewBody } from '../interface/interfaces';
 import { AdminApiService } from './admin-api.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -47,5 +47,15 @@ export class AdminApiManager {
       // TODO на какой статус меняем?
       await this.service.attachRequestToReview(review.id, request.requestId, requestsDynamo);
     }
+  }
+
+  async getReviewGroups(): Promise<Review[]> {
+    const reviewsDynamo = new DynamodbService(this.reviewsDB);
+    const reviews: any = await reviewsDynamo.scan();
+    const requestsDynamo = new DynamodbService(this.humanRequestsDB);
+    for (const review of reviews) {
+      review.requests = await Promise.all(review.requests.map((requestId) => requestsDynamo.getItem({ requestId })));
+    }
+    return reviews;
   }
 }

@@ -2,7 +2,7 @@ import { log } from '@helper/logger';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
 import { Handler } from 'aws-lambda';
-import { HumanRequest, ReviewBody } from '../interface/interfaces';
+import { HumanRequest, Review, ReviewBody } from '../interface/interfaces';
 import { AdminApiManager } from './admin-api.manager';
 
 export const getHumanRequests: Handler<APIGatewayLambdaEvent<void>, HumanRequest[]> = async (event) => {
@@ -15,7 +15,9 @@ export const getHumanRequests: Handler<APIGatewayLambdaEvent<void>, HumanRequest
   }
 };
 
-export const getAnswersByTags: Handler<APIGatewayLambdaEvent<null, null, { tags: string }>, string[]> = async (event) => {
+export const getAnswersByTags: Handler<APIGatewayLambdaEvent<null, null, { tags: string }>, string[]> = async (
+  event
+) => {
   log(event);
   try {
     const manager = new AdminApiManager();
@@ -43,6 +45,16 @@ export const createReviewGroup: Handler<APIGatewayLambdaEvent<ReviewBody>, void>
   try {
     const manager = new AdminApiManager();
     return await manager.createReviewGroup(event.body);
+  } catch (error) {
+    errorHandler(error);
+  }
+};
+
+export const getReviewGroups: Handler<APIGatewayLambdaEvent<void>, Review[]> = async (event) => {
+  log('createReviewGroup', event);
+  try {
+    const manager = new AdminApiManager();
+    return await manager.getReviewGroups();
   } catch (error) {
     errorHandler(error);
   }

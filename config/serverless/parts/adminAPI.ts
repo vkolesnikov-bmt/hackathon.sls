@@ -86,5 +86,26 @@ export const adminAPIConfig: AWSPartitial = {
         },
       ],
     },
+    getReviewGroups: {
+      handler: 'api/admin-api/handler.getReviewGroups',
+      memorySize: 128,
+      events: [
+        {
+          http: {
+            path: 'api/admin/reviews/',
+            method: 'get',
+            integration: 'lambda',
+            cors: true,
+            response: {
+              headers: {
+                'Access-Control-Allow-Origin': "'*'",
+                'Content-Type': "'application/json'",
+              },
+              template: "$input.json('$')",
+            },
+          },
+        },
+      ],
+    },
   },
 };
