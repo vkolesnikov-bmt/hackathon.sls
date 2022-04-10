@@ -5,7 +5,7 @@ import { AdminApiService } from './admin-api.service';
 export class AdminApiManager {
   private service: AdminApiService;
   private humanRequestsDB = 'hackathon-human-request';
-  private typedAnswersDB = 'hackathon-typed-answers';
+  private typedAnswersDB = 'hackathon-answers';
   constructor() {
     this.service = new AdminApiService();
   }
@@ -15,13 +15,14 @@ export class AdminApiManager {
     return this.service.getUserReviews(dynamo);
   }
 
-  async updateUserReview(reviewId: string, status: string): Promise<void> {
+  async updateHumanReport(reviewId: string, body: Partial<HumanRequest>): Promise<void> {
     const dynamo = new DynamodbService(this.humanRequestsDB);
-    return this.service.updateUserStatus(reviewId, status, dynamo);
+    return this.service.updateHumanReport(reviewId, body, dynamo);
   }
 
-  async getTypedAnswers(tags: string[]): Promise<string[]> {
+  async getTypedAnswers(tagsStr: string): Promise<string[]> {
     const dynamo = new DynamodbService(this.typedAnswersDB);
+    const tags = decodeURIComponent(tagsStr).split(',');
     const answers: string[] = [];
     for (const tag of tags) {
       const typedAnswer = await this.service.getTypedAnswers(tag, dynamo);

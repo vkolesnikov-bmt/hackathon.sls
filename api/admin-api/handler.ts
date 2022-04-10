@@ -15,21 +15,24 @@ export const getHumanRequests: Handler<APIGatewayLambdaEvent<void>, HumanRequest
   }
 };
 
-export const updateUserReview: Handler<APIGatewayLambdaEvent<{ status: string }>, void> = async (event) => {
+export const getAnswersByTags: Handler<APIGatewayLambdaEvent<null, null, { tags: string }>, string[]> = async (event) => {
   log(event);
   try {
     const manager = new AdminApiManager();
-    return await manager.updateUserReview(event.path.id, event.body.status);
+    return await manager.getTypedAnswers(event.query.tags);
   } catch (error) {
     errorHandler(error);
   }
 };
 
-export const getTypedAnswers: Handler<APIGatewayLambdaEvent<{ tags: string[] }>, string[]> = async (event) => {
-  log(event);
+export const updateHumanRequest: Handler<
+  APIGatewayLambdaEvent<Partial<HumanRequest>, { requestId: string }>,
+  void
+> = async (event) => {
+  log('UPDATE HUMAN REQUEST', event);
   try {
     const manager = new AdminApiManager();
-    return await manager.getTypedAnswers(event.body.tags);
+    return await manager.updateHumanReport(event.path.requestId, event.body);
   } catch (error) {
     errorHandler(error);
   }
