@@ -56,7 +56,7 @@ export class DynamodbService {
     return Items!.map((item) => unmarshall(item)) as T;
   }
 
-  async scan(options: Partial<ScanInput> = {}): Promise<any> {
+  async scan<T>(options: Partial<ScanInput> = {}): Promise<T> {
     const params: ScanInput = {
       TableName: this.tableName,
       ...options,
@@ -66,7 +66,7 @@ export class DynamodbService {
       throw new HttpNotFoundError('Features not found');
     }
 
-    return Items?.map((item: any) => unmarshall(item));
+    return Items.map((item: any) => unmarshall(item));
   }
 
   async updateItem(keys: ObjectType, options: Partial<UpdateItemInput> = {}): Promise<void> {

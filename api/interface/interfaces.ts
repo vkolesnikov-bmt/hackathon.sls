@@ -12,6 +12,7 @@ export interface HumanRequest {
   updatedAt: Date;
   city: string;
   institution: string;
+  reviewId?: string;
 }
 
 export interface Review {

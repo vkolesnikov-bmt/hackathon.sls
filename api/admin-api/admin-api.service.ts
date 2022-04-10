@@ -2,6 +2,9 @@ import { DynamodbService } from '@services/dynamodb.service';
 import { HumanRequest } from '../interface/interfaces';
 
 export class AdminApiService {
+  async getUserReviewsByOrganizationId(dynamo: DynamodbService): Promise<HumanRequest[]> {
+    return dynamo.scan<HumanRequest[]>();
+  }
   async updateUserStatus(id: string, status: string, dynamoDb: DynamodbService): Promise<void> {
     const key = { id };
     const options = {
@@ -30,18 +33,5 @@ export class AdminApiService {
     };
     const answers = await dynamo.query(options);
     return answers!.map((answer: any) => answer.text as string);
-  }
-
-  async getUserReviewsByOrganizationId(organizationId: string, dynamo: DynamodbService): Promise<HumanRequest[]> {
-    const options = {
-      ExpressionAttributeNames: {
-        '#organizationId': 'organizationId',
-      },
-      ExpressionAttributeValues: {
-        ':organizationId': { S: organizationId },
-      },
-      KeyConditionExpression: '#organizationId = :organizationId',
-    };
-    return dynamo.query<HumanRequest[]>(options);
   }
 }

@@ -5,6 +5,16 @@ import { Handler } from 'aws-lambda';
 import { HumanRequest } from '../interface/interfaces';
 import { AdminApiManager } from './admin-api.manager';
 
+export const getHumanRequests: Handler<APIGatewayLambdaEvent<void>, HumanRequest[]> = async (event) => {
+  log(event);
+  try {
+    const manager = new AdminApiManager();
+    return await manager.getHumanRequests();
+  } catch (error) {
+    errorHandler(error);
+  }
+};
+
 export const updateUserReview: Handler<APIGatewayLambdaEvent<{ status: string }>, void> = async (event) => {
   log(event);
   try {
@@ -20,16 +30,6 @@ export const getTypedAnswers: Handler<APIGatewayLambdaEvent<{ tags: string[] }>,
   try {
     const manager = new AdminApiManager();
     return await manager.getTypedAnswers(event.body.tags);
-  } catch (error) {
-    errorHandler(error);
-  }
-};
-
-export const getUsersReviewsByOrganization: Handler<APIGatewayLambdaEvent<any>, HumanRequest[]> = async (event) => {
-  log(event);
-  try {
-    const manager = new AdminApiManager();
-    return await manager.getUsersReviewsByOrganization(event.path.organizationId);
   } catch (error) {
     errorHandler(error);
   }

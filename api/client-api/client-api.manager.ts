@@ -14,7 +14,7 @@ export class ClientApiManager {
   }
 
   async getCities(dynamoDB: DynamodbService): Promise<CitiesGetResponse> {
-    const cities = await dynamoDB.scan();
+    const cities: any = await dynamoDB.scan();
     return cities.map((city) => ({
       city: city.city,
       organizations: JSON.parse(city.organizations),
@@ -42,7 +42,7 @@ export class ClientApiManager {
 
   async addHumanRequest(eventBody: HumanRequest, dynamoDB: DynamodbService) {
     const requestId = uuidv4();
-    const newItem = { ...eventBody, requestId };
+    const newItem: HumanRequest = { ...eventBody, requestId, status: 'created' };
     await dynamoDB.createItem(newItem);
     return 'Human request is send';
   }

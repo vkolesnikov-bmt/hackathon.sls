@@ -1,4 +1,5 @@
 import type { AWS } from '@serverless/typescript';
+import { adminAPIConfig } from './config/serverless/parts/adminAPI';
 import { clientAPIConfig } from './config/serverless/parts/clientAPI';
 import { clientReviewsConfig } from './config/serverless/parts/reviews';
 import { joinParts } from './config/serverless/utils';
@@ -126,4 +127,4 @@ const masterConfig: AWS = {
   ],
 };
 
-module.exports = joinParts(masterConfig, [clientAPIConfig, clientReviewsConfig]);
+module.exports = joinParts(masterConfig, [clientAPIConfig, clientReviewsConfig, adminAPIConfig]);
