@@ -57,8 +57,11 @@ export class AdminApiManager {
     const reviewsDynamo = new DynamodbService(this.reviewsDB);
     const reviews: any = await reviewsDynamo.scan();
     const requestsDynamo = new DynamodbService(this.humanRequestsDB);
+    const statuses: RequestStatus[] = ['readyToReview'];
     for (const review of reviews) {
-      review.requests = await Promise.all(review.requests.map((requestId) => requestsDynamo.getItem({ requestId })));
+      review.requests = (
+        await Promise.all(review.requests.map((requestId) => requestsDynamo.getItem({ requestId })))
+      ).filter((review) => statuses.includes(review.status));
     }
     return reviews;
   }
