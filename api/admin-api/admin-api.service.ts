@@ -1,5 +1,6 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { DynamodbService } from '@services/dynamodb.service';
+import { RequestStatus } from '../client-api/client.interfaces';
 import { HumanRequest } from '../interface/interfaces';
 
 export class AdminApiService {
@@ -36,20 +37,30 @@ export class AdminApiService {
     return JSON.parse(answers.answers);
   }
 
-  async attachRequestToReview(reviewId: string, requestId: string, dynamo: DynamodbService): Promise<void> {
+  async attachRequestToReview(
+    reviewId: string,
+    requestId: string,
+    dynamo: DynamodbService,
+    status: RequestStatus
+  ): Promise<void> {
     const options = {
       ExpressionAttributeNames: {
         '#id': 'reviewId',
+        '#status': 'status',
       },
       ExpressionAttributeValues: {
         ':id': {
           S: reviewId,
         },
+        ':status': {
+          S: status,
+        },
       },
-      UpdateExpression: 'SET #id = :id',
+      UpdateExpression: 'SET #id = :id, #status = :status',
     };
     console.log(reviewId);
     console.log(requestId);
+    console.log(status);
     await dynamo.updateItem({ requestId }, options);
   }
 }

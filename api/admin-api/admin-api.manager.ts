@@ -1,5 +1,6 @@
 import { DynamodbService } from '@services/dynamodb.service';
 import { EmailService } from '@services/email.service';
+import { RequestStatus } from '../client-api/client.interfaces';
 import { HumanRequest, Review, ReviewBody } from '../interface/interfaces';
 import { AdminApiService } from './admin-api.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -45,8 +46,8 @@ export class AdminApiManager {
     };
     await reviewsDynamo.createItem(review);
     for (const request of reviewBody.requests) {
-      // TODO на какой статус меняем?
-      await this.service.attachRequestToReview(review.id, request.requestId, requestsDynamo);
+      const status: RequestStatus = 'readyToReview';
+      await this.service.attachRequestToReview(review.id, request.requestId, requestsDynamo, status);
     }
   }
 
