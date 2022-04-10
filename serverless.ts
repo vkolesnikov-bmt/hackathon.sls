@@ -5,7 +5,7 @@ import { clientReviewsConfig } from './config/serverless/parts/reviews';
 import { joinParts } from './config/serverless/utils';
 
 const CLIENT = '${file(./env.yml):${self:provider.stage}.CLIENT}';
-const SERVICE_NAME = `template-sls`;
+const SERVICE_NAME = `hackathon-sls`;
 const STAGE = '${opt:stage, "dev"}';
 const REGION = '${file(./env.yml):${self:provider.stage}.REGION}';
 const PROFILE = '${file(./env.yml):${self:provider.stage}.PROFILE}';
