@@ -63,16 +63,27 @@ export class AdminApiManager {
     return reviews;
   }
 
-  // TODO нужно ли что-то делать с review?
   async completeRequest({ text, requests }: Review, emailService: EmailService): Promise<void> {
     const requestsDynamo = new DynamodbService(this.humanRequestsDB);
     const emails = requests.map((request) => request.email);
-    for (const email of emails) {
-      await emailService.sendEmail(email, text);
-    }
+    await Promise.all(
+      emails.map((email) => {
+        try {
+          emailService.sendEmail(email, text);
+        } catch (error) {
+          console.log('email send error', error);
+        }
+      })
+    );
     const requestsIds = requests.map((request) => request.requestId);
-    for (const requestId of requestsIds) {
-      return this.service.updateHumanReport(requestId, { status: 'done' }, requestsDynamo);
-    }
+    await Promise.all(
+      requestsIds.map((requestId) => {
+        try {
+          this.service.updateHumanReport(requestId, { status: 'done' }, requestsDynamo);
+        } catch (error) {
+          console.log('change requestId status error', error);
+        }
+      })
+    );
   }
 }

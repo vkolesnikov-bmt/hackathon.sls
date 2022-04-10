@@ -107,5 +107,26 @@ export const adminAPIConfig: AWSPartitial = {
         },
       ],
     },
+    completeRequest: {
+      handler: 'api/admin-api/handler.completeRequest',
+      memorySize: 128,
+      events: [
+        {
+          http: {
+            path: 'api/admin/completeRequest/',
+            method: 'post',
+            integration: 'lambda',
+            cors: true,
+            response: {
+              headers: {
+                'Access-Control-Allow-Origin': "'*'",
+                'Content-Type': "'application/json'",
+              },
+              template: "$input.json('$')",
+            },
+          },
+        },
+      ],
+    },
   },
 };
