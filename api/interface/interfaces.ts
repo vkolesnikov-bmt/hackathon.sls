@@ -13,6 +13,7 @@ export interface HumanRequest {
   city: string;
   institution: string;
   reviewId?: string;
+  email: string;
 }
 
 export interface Review extends ReviewBody {

@@ -1,4 +1,5 @@
 import { DynamodbService } from '@services/dynamodb.service';
+import { EmailService } from '@services/email.service';
 import { HumanRequest, Review, ReviewBody } from '../interface/interfaces';
 import { AdminApiService } from './admin-api.service';
 import { v4 as uuidv4 } from 'uuid';
@@ -57,5 +58,18 @@ export class AdminApiManager {
       review.requests = await Promise.all(review.requests.map((requestId) => requestsDynamo.getItem({ requestId })));
     }
     return reviews;
+  }
+
+  // TODO нужно ли что-то делать с review?
+  async completeRequest({ text, requests }: Review, emailService: EmailService): Promise<void> {
+    const requestsDynamo = new DynamodbService(this.humanRequestsDB);
+    const emails = requests.map((request) => request.email);
+    for (const email of emails) {
+      await emailService.sendEmail(email, text);
+    }
+    const requestsIds = requests.map((request) => request.requestId);
+    for (const requestId of requestsIds) {
+      return this.service.updateHumanReport(requestId, { status: 'done' }, requestsDynamo);
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { log } from '@helper/logger';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
+import { EmailService } from '@services/email.service';
 import { Handler } from 'aws-lambda';
 import { HumanRequest, Review, ReviewBody } from '../interface/interfaces';
 import { AdminApiManager } from './admin-api.manager';
@@ -55,6 +56,17 @@ export const getReviewGroups: Handler<APIGatewayLambdaEvent<void>, Review[]> = a
   try {
     const manager = new AdminApiManager();
     return await manager.getReviewGroups();
+  } catch (error) {
+    errorHandler(error);
+  }
+};
+
+export const completeRequest: Handler<APIGatewayLambdaEvent<Review>, void> = async (event) => {
+  log('createReviewGroup', event);
+  try {
+    const manager = new AdminApiManager();
+    const emailService = new EmailService();
+    return await manager.completeRequest(event.body, emailService);
   } catch (error) {
     errorHandler(error);
   }
