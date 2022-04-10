@@ -12,7 +12,7 @@ export class AdminApiManager {
 
   async getHumanRequests(): Promise<HumanRequest[]> {
     const dynamo = new DynamodbService(this.humanRequestsDB);
-    return this.service.getUserReviewsByOrganizationId(dynamo);
+    return this.service.getUserReviews(dynamo);
   }
 
   async updateUserReview(reviewId: string, status: string): Promise<void> {

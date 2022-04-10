@@ -20,8 +20,8 @@ export interface HumanRequest {
   tags: string[];
   title: string;
   description: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   city: string;
   organization: string;
   requestId: string;

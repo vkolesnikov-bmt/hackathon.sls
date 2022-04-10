@@ -1,15 +1,14 @@
 import { AWSPartitial } from '../types';
 
-const basePath = 'api/admin';
 export const adminAPIConfig: AWSPartitial = {
   functions: {
-    getCities: {
+    getHumanRequests: {
       handler: 'api/admin-api/handler.getHumanRequests',
       memorySize: 128,
       events: [
         {
           http: {
-            path: `${basePath}/human-requests`,
+            path: 'api/admin/human-requests',
             method: 'get',
             integration: 'lambda',
             cors: true,

@@ -9,6 +9,7 @@ import { addHumanRequest, CitiesGetResponse } from './handler';
 
 export class ClientApiManager {
   private readonly service: ClientApiService;
+
   constructor() {
     this.service = new ClientApiService();
   }
@@ -42,7 +43,13 @@ export class ClientApiManager {
 
   async addHumanRequest(eventBody: HumanRequest, dynamoDB: DynamodbService) {
     const requestId = uuidv4();
-    const newItem: HumanRequest = { ...eventBody, requestId, status: 'created' };
+    const newItem: HumanRequest = {
+      ...eventBody,
+      requestId,
+      status: 'created',
+      createdAt: `${new Date()}`,
+      updatedAt: `${new Date()}`,
+    };
     await dynamoDB.createItem(newItem);
     return 'Human request is send';
   }

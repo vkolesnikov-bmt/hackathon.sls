@@ -2,7 +2,7 @@ import { DynamodbService } from '@services/dynamodb.service';
 import { HumanRequest } from '../interface/interfaces';
 
 export class AdminApiService {
-  async getUserReviewsByOrganizationId(dynamo: DynamodbService): Promise<HumanRequest[]> {
+  async getUserReviews(dynamo: DynamodbService): Promise<HumanRequest[]> {
     return dynamo.scan<HumanRequest[]>();
   }
   async updateUserStatus(id: string, status: string, dynamoDb: DynamodbService): Promise<void> {
