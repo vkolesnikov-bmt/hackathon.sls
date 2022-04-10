@@ -55,7 +55,7 @@ export class AdminApiManager {
 
   async getReviewGroups(): Promise<Review[]> {
     const reviewsDynamo = new DynamodbService(this.reviewsDB);
-    const reviews: any = await reviewsDynamo.scan();
+    const reviews: any[] = await reviewsDynamo.scan();
     const requestsDynamo = new DynamodbService(this.humanRequestsDB);
     const statuses: RequestStatus[] = ['readyToReview'];
     for (const review of reviews) {
@@ -63,7 +63,7 @@ export class AdminApiManager {
         await Promise.all(review.requests.map((requestId) => requestsDynamo.getItem({ requestId })))
       ).filter((review) => statuses.includes(review.status));
     }
-    return reviews;
+    return reviews.filter((review) => review.requests.length);
   }
 
   async completeRequest({ text, requests }: Review, emailService: EmailService): Promise<void> {
