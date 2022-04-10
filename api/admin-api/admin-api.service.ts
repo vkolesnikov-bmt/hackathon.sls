@@ -4,10 +4,6 @@ import { RequestStatus } from '../client-api/client.interfaces';
 import { HumanRequest } from '../interface/interfaces';
 
 export class AdminApiService {
-  async getUserReviews(dynamo: DynamodbService): Promise<HumanRequest[]> {
-    return dynamo.scan<HumanRequest[]>();
-  }
-
   async updateHumanReport(requestId: string, body: Partial<HumanRequest>, dynamoDb: DynamodbService): Promise<void> {
     const key = { requestId };
     const itemKeys = Object.keys(body);

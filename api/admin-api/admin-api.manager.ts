@@ -17,7 +17,9 @@ export class AdminApiManager {
 
   async getHumanRequests(): Promise<HumanRequest[]> {
     const dynamo = new DynamodbService(this.humanRequestsDB);
-    return this.service.getUserReviews(dynamo);
+    const allUserReviews = await dynamo.scan<HumanRequest[]>();
+    const statuses: RequestStatus[] = ['created', 'inProgress', 'reject'];
+    return allUserReviews.filter((review) => statuses.includes(review.status));
   }
 
   async updateHumanReport(reviewId: string, body: Partial<HumanRequest>): Promise<void> {
