@@ -35,4 +35,21 @@ export class AdminApiService {
     }
     return JSON.parse(answers.answers);
   }
+
+  async attachRequestToReview(reviewId: string, requestId: string, dynamo: DynamodbService): Promise<void> {
+    const options = {
+      ExpressionAttributeNames: {
+        '#id': 'reviewId',
+      },
+      ExpressionAttributeValues: {
+        ':id': {
+          S: reviewId,
+        },
+      },
+      UpdateExpression: 'SET #id = :id',
+    };
+    console.log(reviewId);
+    console.log(requestId);
+    await dynamo.updateItem({ requestId }, options);
+  }
 }

@@ -2,7 +2,7 @@ export type RequestStatus = 'created' | 'inProgress' | 'readyToReview' | 'review
 export type RequestType = 'complaint' | 'reviews';
 
 export interface HumanRequest {
-  id: string;
+  requestId: string;
   type: RequestType;
   status: RequestStatus;
   tags: string[];
@@ -15,8 +15,11 @@ export interface HumanRequest {
   reviewId?: string;
 }
 
-export interface Review {
+export interface Review extends ReviewBody {
   id: string;
+}
+
+export interface ReviewBody {
   title: string;
   text: string;
   requests: HumanRequest[];

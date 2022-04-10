@@ -2,7 +2,7 @@ import { log } from '@helper/logger';
 import { errorHandler } from '@helper/rest-api/error-handler';
 import { APIGatewayLambdaEvent } from '@interfaces/api-gateway-lambda.interface';
 import { Handler } from 'aws-lambda';
-import { HumanRequest } from '../interface/interfaces';
+import { HumanRequest, ReviewBody } from '../interface/interfaces';
 import { AdminApiManager } from './admin-api.manager';
 
 export const getHumanRequests: Handler<APIGatewayLambdaEvent<void>, HumanRequest[]> = async (event) => {
@@ -33,6 +33,16 @@ export const updateHumanRequest: Handler<
   try {
     const manager = new AdminApiManager();
     return await manager.updateHumanReport(event.path.requestId, event.body);
+  } catch (error) {
+    errorHandler(error);
+  }
+};
+
+export const createReviewGroup: Handler<APIGatewayLambdaEvent<ReviewBody>, void> = async (event) => {
+  log('createReviewGroup', event);
+  try {
+    const manager = new AdminApiManager();
+    return await manager.createReviewGroup(event.body);
   } catch (error) {
     errorHandler(error);
   }
