@@ -71,3 +71,13 @@ export const completeRequest: Handler<APIGatewayLambdaEvent<Review>, void> = asy
     errorHandler(error);
   }
 };
+
+export const rejectReview: Handler<APIGatewayLambdaEvent<Review>, void> = async (event) => {
+  log('createReviewGroup', event);
+  try {
+    const manager = new AdminApiManager();
+    return await manager.rejectReview(event.body);
+  } catch (error) {
+    errorHandler(error);
+  }
+};

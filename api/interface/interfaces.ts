@@ -14,6 +14,7 @@ export interface HumanRequest {
   institution: string;
   reviewId?: string;
   email: string;
+  cancelMessage?: string;
 }
 
 export interface Review extends ReviewBody {
@@ -24,4 +25,5 @@ export interface ReviewBody {
   title: string;
   text: string;
   requests: HumanRequest[];
+  cancelMessage?: string;
 }

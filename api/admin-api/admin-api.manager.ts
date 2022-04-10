@@ -89,4 +89,18 @@ export class AdminApiManager {
       })
     );
   }
+
+  async rejectReview({ cancelMessage, requests }: Review) {
+    const requestsDynamo = new DynamodbService(this.humanRequestsDB);
+    const requestsIds = requests.map((request) => request.requestId);
+    await Promise.all(
+      requestsIds.map((requestId) => {
+        try {
+          this.service.updateHumanReport(requestId, { status: 'reject', cancelMessage }, requestsDynamo);
+        } catch (error) {
+          console.log('change requestId status error', error);
+        }
+      })
+    );
+  }
 }

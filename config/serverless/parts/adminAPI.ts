@@ -128,5 +128,26 @@ export const adminAPIConfig: AWSPartitial = {
         },
       ],
     },
+    rejectReview: {
+      handler: 'api/admin-api/handler.rejectReview',
+      memorySize: 128,
+      events: [
+        {
+          http: {
+            path: 'api/admin/rejectReview/',
+            method: 'post',
+            integration: 'lambda',
+            cors: true,
+            response: {
+              headers: {
+                'Access-Control-Allow-Origin': "'*'",
+                'Content-Type': "'application/json'",
+              },
+              template: "$input.json('$')",
+            },
+          },
+        },
+      ],
+    },
   },
 };
